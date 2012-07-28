@@ -17,10 +17,8 @@ var LF = 0xA;
 
 var requestExpression = /(GET|POST|PUT|DELETE) (.*) HTTP\/1.(1|0)/;
 
-var Header = function (key, value) {
-   this.key = key;
-   this.value = value;
-}
+HTTPParser.REQUEST = "REQUEST";
+HTTPParser.RESPONSE = "RESPONSE";
 
 var Request = function () {
    this.versionMajor = 1;
@@ -42,15 +40,11 @@ function HTTPParser(type) {
    this.onMessageComplete = function () {};
 }
 
-HTTPParser.REQUEST = "REQUEST";
-HTTPParser.RESPONSE = "RESPONSE";
-
 HTTPParser.prototype.reinitialize = function (type) {
    this.state = states.PARSING_REQUEST;
    this.current_line = [];
    this.request = new Request();
 }
-
 
 HTTPParser.prototype.finish = function () { return 0; }
 
