@@ -202,7 +202,6 @@ function expectBody(expected) {
   });
 
   parser.onBody = mustCall(function(buf, start, len) {
-     console.log(buf);
     var body = '' + buf.slice(start, start + len);
     assert.equal(body, 'ping');
     seen_body = true;
