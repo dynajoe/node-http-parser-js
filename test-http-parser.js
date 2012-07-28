@@ -96,11 +96,9 @@ function expectBody(expected) {
     assert.equal(info.url || parser.url, '/hello');
     assert.equal(info.versionMajor, 1);
     assert.equal(info.versionMinor, 1);
-    console.log('passed some assumptions');
   });
 
   parser.execute(request, 0, request.length);
-console.log(parser)
   //
   // Check that if we throw an error in the callbacks that error will be
   // thrown from parser.execute()
@@ -204,6 +202,7 @@ console.log(parser)
   });
 
   parser.onBody = mustCall(function(buf, start, len) {
+     console.log(buf);
     var body = '' + buf.slice(start, start + len);
     assert.equal(body, 'ping');
     seen_body = true;
