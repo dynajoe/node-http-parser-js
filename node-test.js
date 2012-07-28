@@ -7,18 +7,11 @@ var server = http.createServer(function (req, res) {
     "Content-Length": 12,
     "Content-Type": "text/plain"
   });
+
   res.end("Hello World\n");
 });
 
-server.listen(8080, function () {
-  var port = server.address().port;
-  var url = "http://127.0.0.1:" + port + "/";
-  console.log(url);
-  
-  var params = {
-    method: "GET",
-    host: "127.0.0.1",
-    path: "/",
-    port: 8080
-  };  
-});
+var port = process.env.PORT || 8080;
+
+server.listen(port);
+console.log("Listening on port " + port);
