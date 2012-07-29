@@ -59,7 +59,6 @@ HTTPParser.prototype.finish = function () {
 
 HTTPParser.prototype._parseHeader = function () {
    var results = this.info.header.split("\r\n");
-
    var match = requestExpression.exec(results[0]);
 
    this.info.method = match[1];

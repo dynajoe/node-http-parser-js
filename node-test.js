@@ -1,4 +1,4 @@
-process.binding("http_parser").HTTPParser = require('./HttpParser').HTTPParser;
+process.binding("http_parser").HTTPParser = require('./http-parser-stateful').HTTPParser;
 
 var http = require('http');
 
