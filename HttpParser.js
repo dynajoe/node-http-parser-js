@@ -148,7 +148,6 @@ HTTPParser.prototype.execute = function (data, offset, length) {
                   this.info.url = match[2];
                   this.info.versionMajor = match[3];
                   this.info.versionMinor = match[4];
-                  this.info.shouldKeepAlive = false;
                   
                   lastOffset = i;
                   
@@ -164,7 +163,6 @@ HTTPParser.prototype.execute = function (data, offset, length) {
                   this.info.versionMajor = match[1]
                   this.info.versionMinor = match[2];
                   this.info.statusCode = match[3];
-                  this.info.shouldKeepAlive = this._shouldKeepAlive();
                   
                   lastOffset = i;
 
