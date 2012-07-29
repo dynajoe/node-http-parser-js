@@ -88,7 +88,7 @@ HTTPParser.prototype.execute = function (data, offset, length) {
          case states.HEADER_KEY:
             //KEY END
             if (data[i] == COLON) {
-               var header = data.toString('ascii', lastOffset, i);
+               var header = data.toString('ascii', lastOffset + 1, i);
                this.info.headers.push(header);
                this.state = states.HEADER_VALUE;
                lastOffset = i;
@@ -99,7 +99,7 @@ HTTPParser.prototype.execute = function (data, offset, length) {
          case states.HEADER_VALUE:
             //END OF HEADER
             if (data[i] == LF) {
-               var value = data.toString('ascii', lastOffset, i);
+               var value = data.toString('ascii', lastOffset + 2, i - 1);
                this.info.headers.push(value);
                this.state = states.HEADER_END;
                lastOffset = i;
@@ -142,7 +142,7 @@ HTTPParser.prototype.execute = function (data, offset, length) {
                if (this.type == HTTPParser.REQUEST) {
                   
                   var request = data.toString('ascii', lastOffset, i);
-                  var match = requestExpression.exec(request.trim());
+                  var match = requestExpression.exec(request);
                   
                   this.info.method = match[1];
                   this.info.url = match[2];
