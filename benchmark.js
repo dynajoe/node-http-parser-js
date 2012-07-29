@@ -32,12 +32,12 @@ var testParser = function (Parser) {
 
 var results = [];
 
-results.push(runTest('Clump', function () { testParser(ClumpParser); }));
-results.push(runTest('LineByLine', function () { testParser(LblParser); }));
-results.push(runTest('Stateful', function () { testParser(StateParser); }));
+results.push(runTest('clump', function () { testParser(ClumpParser); }));
+results.push(runTest('line-by-line', function () { testParser(LblParser); }));
+results.push(runTest('stateful', function () { testParser(StateParser); }));
 
 var node = runTest('Node', function () { testParser(NodeParser); });
 
 results.forEach(function(e) {
-	console.log(e.name + ": " + Math.round(node.bench / e.bench * 100) + "% of the speed of http_parser.js");
+	console.log(e.name + ": " + Math.round(node.bench / e.bench * 100) + "% of the speed of http_parser.c");
 });
