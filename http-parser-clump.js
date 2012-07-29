@@ -90,6 +90,7 @@ HTTPParser.prototype.execute = function (data, start, length) {
       } else if (this.state == states.ENDING) {   
          this.info.header = data.toString('ascii', start, i - 3);
          this._parseHeader();
+         this.onHeadersComplete(this.info);
          this.state = states.ENDED;
          break;
       } else {
@@ -100,6 +101,7 @@ HTTPParser.prototype.execute = function (data, start, length) {
    if (this.state == states.ENDED) {
       this.onBody(data, i, max - i);
    }
-
+   
+   this.onMessageComplete();
    return length;
 }
