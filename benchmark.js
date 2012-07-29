@@ -10,24 +10,24 @@ var request = [71, 69, 84, 32, 47, 32, 72, 84, 84, 80, 47, 49, 46, 48, 13, 10, 6
 var buffer = new Buffer(request);
 
 function runTest(name, test){
-	setTimeout(function() { 
-		var start = (new Date).getTime();
-		var total = 0.0;
+	var start = (new Date).getTime();
+	var total = 0.0;
 
-		for (var n = 0; n < 10000; n++) 
-		{
-			test();
+	for (var n = 0; n < 10000; n++) 
+	{
+		test();
 
-			if (n % 100 == 0) {
-				total += ((new Date).getTime() - start) / 100.0;	
-				start = (new Date).getTime();
-			}
+		if (n % 100 == 0) {
+			total += ((new Date).getTime() - start) / 100.0;	
+			start = (new Date).getTime();
 		}
+	}
 
-		var avgMs = total / 1000.0;
+	var avgMs = total / 1000.0;
 
-		console.log(name + ": " + avgMs);
-	}, 0);
+	console.log(name + ": " + avgMs);
+
+	return avgMs;
 }
 
 var testParser = function () {
@@ -40,5 +40,7 @@ var nodeParser = function () {
 	parser.execute(buffer, 0, buffer.length);
 };
 
-runTest('Mine', testParser);
-runTest('Node', nodeParser);
+var mine = runTest('Mine', testParser);
+var node = runTest('Node', nodeParser);
+
+console.log( Math.round(node / mine * 100));

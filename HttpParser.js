@@ -17,8 +17,8 @@ for (k in states) {
    state_map[states[k]] = k;
 }
 
-var requestExpression = /^([A-Z]+) (.*) HTTP\/(\d)\.(\d)$/i;
-var responseExpression = /^HTTP\/(\d)\.(\d) (\d{3}) (.*)$/i;
+var requestExpression = /([A-Z]+) ([^ ]*) HTTP\/(\d)\.(\d)/i;
+var responseExpression = /HTTP\/(\d)\.(\d) (\d{3}) (.*)/i;
 
 var CR = 0xD;
 var LF = 0xA;
@@ -28,11 +28,11 @@ HTTPParser.REQUEST = "REQUEST";
 HTTPParser.RESPONSE = "RESPONSE";
 
 var Info = function () {
-   this.versionMajor = 1;
-   this.versionMinor = 1;
-   this.statusCode = 200;
-   this.method = "GET";
-   this.url = "/";
+   this.versionMajor = undefined;
+   this.versionMinor = undefined;
+   this.statusCode = undefined;
+   this.method = undefined;
+   this.url = undefined;
    this.headers = [];
    this.shouldKeepAlive = false;
    this.upgrade = false;
@@ -48,6 +48,7 @@ function HTTPParser(type) {
 
    this.type = type;
    this.info = new Info();
+
    this.onHeaders = function (headers, url) {};
    this.onHeadersComplete = function (info) {};
    this.onBody = function(buffer, start, len) {};
@@ -66,7 +67,7 @@ HTTPParser.prototype.reinitialize = function (type) {
 }
 
 HTTPParser.prototype.finish = function () { 
-   console.log('finish called');
+
 }
 
 HTTPParser.prototype.execute = function (data, offset, length) {
@@ -139,13 +140,15 @@ HTTPParser.prototype.execute = function (data, offset, length) {
             if (data[i] == LF) {
 
                if (this.type == HTTPParser.REQUEST) {
-                  // var match = requestExpression.exec(this.current_buffer.join(""));
                   
-                  // this.info.method = match[1];
-                  // this.info.url = match[2];
-                  // this.info.versionMajor = match[3];
-                  // this.info.versionMinor = match[4];
-                  // this.info.shouldKeepAlive = false;
+                  var request = data.toString('ascii', lastOffset, i);
+                  var match = requestExpression.exec(request.trim());
+                  
+                  this.info.method = match[1];
+                  this.info.url = match[2];
+                  this.info.versionMajor = match[3];
+                  this.info.versionMinor = match[4];
+                  this.info.shouldKeepAlive = false;
                   
                   lastOffset = i;
                   
@@ -154,12 +157,14 @@ HTTPParser.prototype.execute = function (data, offset, length) {
                } 
 
                if (this.type == HTTPParser.RESPONSE) {
-                  // var match = responseExpression.exec(this.current_buffer.join(""));
                   
-                  // this.info.versionMajor = match[1]
-                  // this.info.versionMinor = match[2];
-                  // this.info.statusCode = match[3];
-                  // this.info.shouldKeepAlive = this._shouldKeepAlive();
+                  var response = data.toString('ascii', lastOffset, i);
+                  var match = responseExpression.exec(response);
+                  
+                  this.info.versionMajor = match[1]
+                  this.info.versionMinor = match[2];
+                  this.info.statusCode = match[3];
+                  this.info.shouldKeepAlive = this._shouldKeepAlive();
                   
                   lastOffset = i;
 
